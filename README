@@ -1,0 +1,20 @@
+Deployment
+	Deployed locally
+	Deployed to heroku
+		https://protected-reef-68516.herokuapp.com
+
+Additional Features - 
+	Friends -> See other users in your activity feed and the leaderboard
+	Activities/Reports -> Inspect and filter/search activities, interactive map interface, dynamic geoparsing and route creation
+		Editing points on the map, redraws the route adjusts time/speed etc
+		A users activities page also has a map where all the most recent points of each activity are circled, circles can be expanded to see most popular locations
+		*Speed Calculations require an activity last longer than a minute
+	Dashboard -> Charts/Activity Feed/Leaderboard/Icon representing fitness level (intervals can be changed through myaccount)
+	
+User Experience
+	Used bootstrap/Angular directives to style the app, tried to use out of the box class/styles as much as possible
+	UI navigation uses traditional UI routes as well as Pacemaker Restful routes using jquery and Angular
+	Map interaction uses leaflet.js as I've used Google Maps before and wanted to use an open source alternative
+	Used chart.js for charts
+	-Date filters uses HTML5 input type datetime-local which is not supported in Firefox, or Internet Explorer 12 and earlier versions
+	-Mixing UI strategies for UI - ie Angular and JQuery is not recommended but required to meet all assignment UX requirements (single page app not an option as UI routes required)

@@ -1,0 +1,207 @@
+@(activity: Activity)
+
+@main("Welcome to Pacemaker") {
+
+  
+  
+  
+	<div class="row">
+	<div class="col-md-12">
+		@main_menu("upload")		
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div id="mapid" style="height: 480px;"></div>
+		<input id="latitude" disabled type="text" placeholder="latitude"></input><input id="longitude" disabled type="text" placeholder="longitude"></input>
+	</div>
+	<div class="col-md-6">
+		<form id="activityform" role="form" action="/activity/update/@activity.id" method="POST">		
+			<div class="form-group">					 
+				<label for="activityType">Activity Type</label>
+				<input placeholder="running" class="form-control" type="text" name="activityType" value="@{ activity.activityType }">
+			</div>
+			<div class="form-group">					 
+				<label for="location">Location</label>
+				<input placeholder="Location" id="location-input" readonly="readonly" class="form-control" type="text" name="location" value="@{ activity.location }">
+			</div>
+			<div class="form-group">					 
+				<label for="distance">Distance</label>
+				<input placeholder="Distance" id="distance-input" readonly="readonly" class="form-control" type="number" name="distance" min="0" step="0.01" value="@{ activity.distance }">
+			</div>	
+			<div id="location-div">
+				<div class="form-group">
+				<table id="latlongTable" >
+				<tbody>
+			 	
+			 	</tbody>
+			 	</table>
+			 	</div>	
+			</div>			
+			
+			<button type="submit" class="btn btn-default">
+				Exit Edit Mode
+			</button>
+				<div id="temp">
+				</div>
+		</form>
+	</div>
+
+</div>
+
+<script>
+var mymap = L.map('mapid');
+var route = Array();
+var lines = Array();
+var ids = Array();
+var totalDistance = 0;
+
+function updateLocation(){
+	var lastLatLong = route[route.length-1].marker.getLatLng();
+	$.ajax({
+		url: "/api/gconvert", 
+		type: "GET",
+		data: { lat: lastLatLong.lat, lng: lastLatLong.lng},
+		success: function(result){
+			console.log(result);
+			$( "#location-input" ).val(result);
+		}, error: function(xhr){ 
+			console.log("An error occured: " + xhr.status + " " + xhr.statusText); 
+		}
+	});
+}
+
+function recalculateDistance(){
+	totalDistance = 0;
+	var lastLatLong = null;
+	for (i = 0 ; i < route.length-1; i++){
+		var last_element = route[i].marker.getLatLng();
+		var new_element = route[i+1].marker.getLatLng();
+		lastLatLong = new_element;
+		totalDistance += Math.round(last_element.distanceTo(new_element));	
+	}
+	$( "#distance-input" ).val(totalDistance);
+	
+	
+}
+
+function removeMarker(m, id){
+	if(ids.indexOf(id) > -1){
+		
+		var idx = ids.indexOf(id);
+		ids.splice(idx,1);
+		route.splice(idx,1);
+		var activityId = @activity.id;   
+		$.ajax({
+			url: "/api/activities/" + activityId + "/route/" + id, 
+			type: "DELETE",
+			data: { },
+			success: function(response){
+				
+				m.remove();
+				for(i = 0; i < lines.length; i++){
+					lines[i].remove();
+				}
+				lines = Array();
+				recalculateDistance();
+				updateLocation();
+				for(i = 0; i < route.length-1; i++){
+					var last_element = route[i].marker.getLatLng();
+					var new_element = route[i+1].marker.getLatLng();
+					connectLatLongs(last_element,new_element);
+				}
+				$( "#location-input" ).val(response.address);
+			}, error: function(xhr){ 
+				console.log("An error occured: " + xhr.status + " " + xhr.statusText); 
+			}
+		});
+		
+	}
+	
+}
+
+function addMarker(latitude,longitude){
+	var activityId = @activity.id;   
+	$.ajax({
+		url: "/api/activities/" + activityId + "/location", 
+		type: "POST",
+		data: { latitude: latitude, longitude: longitude },
+		success: function(response){
+			
+			var result = JSON.parse(response)
+			drawMarker(result.latitude,result.longitude,result.id);
+			$( "#location-input" ).val(result.address);
+		}, error: function(xhr){ 
+			console.log("An error occured: " + xhr.status + " " + xhr.statusText); 
+		}
+	});
+}
+
+function drawMarker(latitude,longitude,id){
+	$("#latitude").val(latitude);
+	$("#longitude").val(longitude);
+	var marker = L.marker([latitude, longitude]);
+	route.push({marker: marker, id: id});
+	var id = id;
+	ids.push(id);
+	marker.addTo(mymap);
+	marker.bindPopup("[ " + latitude + "," + longitude + " ]" );
+	marker.on('dblclick', function(){ removeMarker(this, id); });
+	if(route.length > 1){
+		var last_element = route[route.length-2].marker.getLatLng();
+		var new_element = route[route.length-1].marker.getLatLng();
+		connectLatLongs(last_element,new_element);
+		totalDistance += Math.round(last_element.distanceTo(new_element));
+	}
+	$( "#distance-input" ).val(totalDistance);
+	
+	
+}
+
+//Takes latlong objects (marker.getLatLng())
+function connectLatLongs(last_element,new_element){	
+	var elements = Array();	
+	elements.push(last_element);
+	elements.push(new_element);	
+	var polyline = L.polyline(elements, {color: 'red'}).addTo(mymap);
+	lines.push(polyline);
+	
+}
+
+
+
+function onMapClick(e) {
+    var latitude = e.latlng.lat;
+	var longitude = e.latlng.lng;
+	addMarker(latitude,longitude);
+	
+}
+
+mymap.on('click', onMapClick);
+
+$(document).ready(function(){
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic2hhbmV3YXRlcmZvcmQiLCJhIjoiY2l3YnR2ZDh3MDAzYjJ6bnI2ZHBibmZ0NSJ9.M3F-4Vgj5sLk_rIbdZI3DQ', {
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		maxZoom: 18,
+		id: 'your.mapbox.project.id'
+    
+	}).addTo(mymap);
+
+	var centre = [51.505, -0.09];
+	@for(location <- activity.route.sortWith(
+			_.getDateInMillis() < 
+			_.getDateInMillis()
+			)) {
+		centre = [@location.latitude,@location.longitude];
+		drawMarker(@location.latitude,@location.longitude,@location.id);
+	}
+	
+	mymap.setView(centre, 53);
+
+});
+
+</script>
+  
+  
+}

@@ -1,0 +1,85 @@
+.clickable-row {
+    color: black;
+	cursor: pointer;
+}
+
+.clickable-row:hover {
+	background-color: #1F8DD6;
+    color: white;
+}
+
+.friend-counter {
+	color: black;
+}
+
+.friend-counter .count {
+	font-size:xx-large;
+	color: orange;
+}
+
+.activity-header {
+	text-align: center;
+}
+
+.activity-header .figure {
+	font-size:xx-large;
+	color: orange;
+}
+
+.activity-name {
+	background-color: #1F8DD6;
+	color: white;
+	font-size:xx-large;
+	
+}
+
+.distance-counter {
+	color: black;
+}
+
+.distance-counter .count {
+	font-size:xx-large;
+	color: orange;
+}
+
+.distance-counter {
+	color: black;
+}
+
+.input-group {
+	width: 100%;
+}
+
+.input-group .form-control {
+	width: 100%;
+}
+
+.blue {
+	color: blue;
+}
+
+.gray {
+	color: gray;
+}
+
+.dashboard-chart {
+	padding-top: 10px;
+}
+
+.dashboard-header {
+	text-align: center;
+}
+
+.dashboard-chart-header {
+	text-align: center;
+}
+
+.logo-left {
+	padding-left: 7px;
+}
+
+.logo-right {
+	padding-left: 20px;
+}
+
+

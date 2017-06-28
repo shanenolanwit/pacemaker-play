@@ -1,0 +1,18 @@
+
+<table class="table table-condensed table-striped">
+<tbody>
+	    	    	<tr dir-paginate="f in feed | itemsPerPage: 10 ">
+	    	    	
+	    	    	<td>{{ f.formattedDate }}</td>
+	    	    	<td>{{ f.email }}</td>
+	    	    	<td>{{ f.activity }}</td>
+	    	    	<td>{{ f.distance }}</td>
+	    	    	<td>{{ f.distanceTravelled }}</td>	    	    	
+	    	    	<td>{{ f.location }}</td>
+	    	    		
+	    			</tr>
+	    	    </tbody>
+	    	    </table>
+	    	    <dir-pagination-controls></dir-pagination-controls>
+
+

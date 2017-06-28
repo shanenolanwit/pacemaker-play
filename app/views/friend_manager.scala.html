@@ -1,0 +1,101 @@
+@(user: User)
+
+@main("Friend Manager") {
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="row">
+	<div class="col-md-12">
+		@main_menu("friends")
+	</div>
+</div>
+<div ng-init="userid=@user.id"></div>
+<div class="row" ng-controller="Users">
+	<div class="col-md-6">
+		<div class="row text-center">
+			<div class="col-md-6 friend-counter">
+				<div class="row">
+					<div class="col-md-12 count">{{my.friends.length}}</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">FRIENDS</div>
+				</div>
+					 
+			</div>
+			<div class="col-md-6 distance-counter">
+				<div class="row">
+					<div class="col-md-12 count">{{my.friends.distanceTravelled}}</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">Metres Travelled</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">@user_index_table_adv()</div>
+		</div>
+		
+	</div>
+		<div class="col-md-6">
+		
+			<div ng-show="user != null">
+				<table class="table friend-table">
+					<thead></thead>
+					<tbody>
+					<tr><th> NAME </th><td>{{ user.firstname }} {{ user.lastname }}</td></tr>
+					<tr><th> EMAIL </th><td>{{ user.email }}</td></tr>
+					<tr><th> DISTANCE </th><td>{{ user.distanceTravelled }}</td></tr>
+					<tr ng-if="user.is_friend">
+						<th>FRIENDS</th>
+						<td><span ng-click="unfriend(user.id)"class="btn btn-danger">End Friendship</span></td>
+					</tr>
+					<tr ng-if="!user.is_friend">
+						<th>Not Friends Yet</th>
+						<td><span ng-click="friend(user.id)" class="btn btn-primary">Create Friendship</span></td>
+					</tr>
+					</tbody>
+				</table>
+				
+				
+				<div class="row">
+				<div class="col-md-12" ng-if="user.distanceTravelled > 0 && user.distanceTravelled < user.phaseInterval">
+					{{ user.distanceTravelled }} down . . .
+					<img src="@routes.Assets.at("images/Phase1.PNG")">
+					{{ 10000 - user.distanceTravelled }} to go . . .
+				</div>
+				<div ng-if="user.distanceTravelled >= user.phaseInterval && user.distanceTravelled < user.phaseInterval*2">
+					{{ user.distanceTravelled }} down . . .
+					<img src="@routes.Assets.at("images/Phase2.PNG")">
+					{{ user.phaseInterval*2 - user.distanceTravelled }} to go . . .
+				</div>
+				<div ng-if="user.distanceTravelled >= user.phaseInterval*2 && user.distanceTravelled < user.phaseInterval*3">
+					{{ user.distanceTravelled }} down . . .
+					<img src="@routes.Assets.at("images/Phase3.PNG")">
+					{{ user.phaseInterval*3 - user.distanceTravelled }} to go . . .
+				</div>
+				<div ng-if="user.distanceTravelled >= user.phaseInterval*3 && user.distanceTravelled < user.phaseInterval*4">
+					{{ user.distanceTravelled }} down . . .
+					<img src="@routes.Assets.at("images/Phase4.PNG")">
+					{{ user.phaseInterval*4 - user.distanceTravelled }} to go . . .
+				</div>
+				<div ng-if="user.distanceTravelled >= user.phaseInterval*4">
+					{{ user.distanceTravelled }} travelled <br/>
+					<img src="@routes.Assets.at("images/Phase5.PNG")">
+				</div>
+
+			</div>
+			
+				
+			</div>
+		</div>
+</div>
+  
+  
+}

@@ -1,0 +1,93 @@
+@(user: User)
+
+@main("Welcome to Pacemaker") {
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="row">
+	<div class="col-md-12">
+		@main_menu("dashboard")
+	</div>
+</div>
+<div ng-init="userid=@user.id"></div>
+<div ng-controller="Dashboard">
+	<div class="row">
+		<div class="col-md-4">
+			@user_profile()
+			
+		</div>
+		<div class="col-md-4 dashboard-chart">
+			<h3 class="dashboard-chart-header">Activity Breakdown</h3>
+			<canvas id="pie" class="chart chart-pie"
+				chart-data="chart1data" chart-labels="chart1labels" chart-options="chart1options">
+			</canvas> 
+		</div>
+		<div class="col-md-4 dashboard-chart">
+			<h3 class="dashboard-chart-header">Activity Records</h3>
+			<canvas id="radar" class="chart chart-radar"
+				chart-data="chart2data" chart-options="chart2options" chart-labels="chart2labels">
+			</canvas> 
+		</div>
+		
+	</div>
+	<div class="row">
+		<div class="col-md-8" ng-controller="ActivityFeed">
+			<h3>Activity Feed</h3>
+			@activity_feed_table()
+		</div>		
+		<div class="col-md-4">`
+			<h3>LeaderBoard</h3>
+			<form>
+				<div class="form-group">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Search" ng-model="searchTerm">
+					</div>      
+				</div>
+			</form>	  
+			<table class="table table-bordered table-striped">
+	    	    <thead>
+	    	    	<tr>
+	    	    		<td>
+	    	    			<a href="#" ng-click="sortType = 'email'; sortReverse = !sortReverse">
+	    	    				User
+	    	    				<span ng-show="sortType == 'email' && !sortReverse" class="fa fa-caret-down"></span>
+	    	    				<span ng-show="sortType == 'email' && sortReverse" class="fa fa-caret-up"></span>
+	    	    			</a>
+	    	    		</td>
+	      	    		<td>
+	      	    			<a href="#" ng-click="sortType = 'distanceTravelled'; sortReverse = !sortReverse">
+    	    					Distance
+    	    					<span ng-show="sortType == 'distanceTravelled' && !sortReverse" class="fa fa-caret-down"></span>
+    	    					<span ng-show="sortType == 'distanceTravelled' && sortReverse" class="fa fa-caret-up"></span>
+    	    				</a>
+    	    			</td>      
+    	    		</tr>
+    	    	</thead>
+	    	    <tbody>
+	    	    	<tr ng-repeat="u in users | orderBy:sortType:sortReverse | filter: { email : searchTerm }">
+	    	    		<td>{{ u.email }}</td>
+	    	    		<td>{{ u.distanceTravelled }}</td>
+	    			</tr>
+	    	    </tbody>
+	      </table>
+	     
+	      
+		</div>
+		
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+		
+		</div>
+	</div>
+</div>
+  
+  
+}

@@ -1,0 +1,152 @@
+@(user: User)(activity: Activity)
+
+@main("Welcome to Pacemaker") {
+
+	<div ng-init="userid=@user.id"></div>
+	<div ng-init="activityid=@activity.id"></div>
+	<div ng-controller="ShowActivity">
+	<div class="row">
+			<div class="col-md-12">
+				@main_menu("activities")		
+			</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div id="mapid" style="height: 480px;"></div>
+			<input placeholder="Location" 
+				id="location-input" disabled 
+				class="form-control" type="text" value="@activity.location     [ @activity.distance meters from origin ]">
+
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12 activity-header activity-name">
+					<span class="fadeIn ">@activity.activityType</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 activity-header">START<br/><span class="fadeIn figure">@{activity.createdOn.toString().substring(0, activity.createdOn.toString().lastIndexOf(".")).replace("T","\n")}</span></div>
+				<div class="col-md-6 activity-header">UPDATED<br/><span class="fadeIn figure">@{activity.lastUpdate.toString().substring(0, activity.createdOn.toString().lastIndexOf(".")).replace("T","\n")}</span></div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 activity-header">TOTAL DISTANCE (meters)<br/><span class="fadeIn figure">@activity.distance</span></div>
+				<div class="col-md-6 activity-header">TIME TAKEN<br/><span class="fadeIn figure">@activity.printDuration()</span></div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 activity-header">AVERAGE SPEED (kmph)<br/><span class="fadeIn figure">@activity.getKmph()</span></div>
+				<div class="col-md-6 activity-header">DATA POINTS<br/><span class="fadeIn figure">@activity.route.size()</span></div>			
+			</div>
+			
+				
+				<div class="btn-group">
+					<button type="submit" class="btn btn-info" ng-click="editActivity()">Enter Edit Mode</button>
+					<button type="submit" class="btn btn-danger" ng-click="deleteActivity()">Delete</button>
+				</div>
+			
+		</div>
+	</div>	
+	</div>
+	
+	
+  
+	
+  
+<script>
+	var mymap = L.map('mapid');
+	var route = Array();
+	var lines = Array();
+	var ids = Array();
+	var totalDistance = 0;
+
+	function updateForm(marker,id){
+		var lastLatLong = marker.getLatLng();
+		$.ajax({
+			url: "/api/gconvert", 
+			type: "GET",
+			data: { lat: lastLatLong.lat, lng: lastLatLong.lng},
+			success: function(result){
+				console.log(result);
+				
+				totalDistance = 0;
+				for(i = 0; i< ids.indexOf(id); i++){
+					var last_element = route[i].marker.getLatLng();
+					var new_element = route[i+1].marker.getLatLng();
+					lastLatLong = new_element;
+					totalDistance += Math.round(last_element.distanceTo(new_element));					
+				}
+				$( "#location-input" ).val(result + "    [ " + totalDistance + " meters from origin ]");
+			}, error: function(xhr){ 
+				console.log("An error occured: " + xhr.status + " " + xhr.statusText); 
+			}
+		});
+	}	
+
+	function drawMarker(latitude,longitude,id){
+		$("#latitude").val(latitude);
+		$("#longitude").val(longitude);
+		var marker = L.marker([latitude, longitude]);
+		route.push({marker: marker, id: id});
+		var id = id;
+		ids.push(id);
+		marker.addTo(mymap);
+		marker.bindPopup("[ " + latitude + "," + longitude + " ]" );
+		marker.on('click', function(){ updateForm(this,id) });
+		if(route.length > 1){
+			var last_element = route[route.length-2].marker.getLatLng();
+			var new_element = route[route.length-1].marker.getLatLng();
+			connectLatLongs(last_element,new_element);
+			totalDistance += Math.round(last_element.distanceTo(new_element));
+		}
+		$( "#distance-input" ).val(totalDistance);
+		
+		
+	}
+
+	//Takes latlong objects (marker.getLatLng())
+	function connectLatLongs(last_element,new_element){	
+		var elements = Array();	
+		elements.push(last_element);
+		elements.push(new_element);	
+		var polyline = L.polyline(elements, {color: 'red'}).addTo(mymap);
+		lines.push(polyline);
+		
+	}
+
+
+
+	
+
+	$(document).ready(function(){
+
+		L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic2hhbmV3YXRlcmZvcmQiLCJhIjoiY2l3YnR2ZDh3MDAzYjJ6bnI2ZHBibmZ0NSJ9.M3F-4Vgj5sLk_rIbdZI3DQ', {
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			maxZoom: 18,
+			id: 'your.mapbox.project.id'
+	    
+		}).addTo(mymap);
+
+		var centre = [51.505, -0.09];
+		@for(location <- activity.route.sortWith(
+				_.getDateInMillis() < 
+				_.getDateInMillis()
+				)) {
+			centre = [@location.latitude,@location.longitude];
+			drawMarker(@location.latitude,@location.longitude,@location.id);
+		}
+		
+		mymap.setView(centre, 53);
+
+	});
+
+
+
+</script>
+  
+  
+  
+  
+
+
+  
+  
+}

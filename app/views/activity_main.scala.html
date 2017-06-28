@@ -1,0 +1,34 @@
+@(user: User)(activities: List[Activity])(locations: List[Location])
+
+@main("Welcome to Pacemaker") {
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="row">
+	<div class="col-md-12">
+		@main_menu("activities")
+	</div>
+</div>
+<div class="row">
+	
+	<div class="col-md-6" >
+		<h3>My Activities</h3>
+		@activity_index_table(user)
+	</div>
+		
+	<div class="col-md-6">
+		<h3>My Locations</h3>
+		@location_index_map(locations)
+	</div>
+</div>
+
+  
+  
+}

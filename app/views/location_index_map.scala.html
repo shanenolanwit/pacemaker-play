@@ -1,0 +1,78 @@
+@(locations: List[Location])
+
+
+<div id="mapid" style="height: 480px;"></div>
+
+
+
+<script>
+var mymap = L.map('mapid');
+var mycircles = Array();
+var radius = 50;
+
+function addCircle(lat,lng, radius){
+	
+	var circle = L.circle([lat,lng], radius);
+	mycircles.push(circle);
+	circle.addTo(mymap);
+	circle.on('click', function(){ 		
+		for(var i=0; i<mycircles.length; i++){	
+			if(radius < 800){
+				mycircles[i].setRadius(radius*2);	
+			}
+								
+		}
+		if(radius < 800){
+			radius = radius*2;
+		}else{
+			radius = 25;
+		}
+		
+		
+	});
+	
+		
+	
+}
+
+
+
+$(document).ready(function(){
+
+
+
+	
+
+
+
+
+
+
+
+L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic2hhbmV3YXRlcmZvcmQiLCJhIjoiY2l3YnR2ZDh3MDAzYjJ6bnI2ZHBibmZ0NSJ9.M3F-4Vgj5sLk_rIbdZI3DQ', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'your.mapbox.project.id'
+    
+}).addTo(mymap);
+
+var centre = [51.505, -0.09];
+
+@for(location <- {{ locations }}) {
+	centre = [@location.latitude,@location.longitude];
+	addCircle(@location.latitude,@location.longitude, 50);
+}
+
+mymap.setView(centre, 53);
+
+});
+
+
+
+
+
+
+
+
+
+</script>

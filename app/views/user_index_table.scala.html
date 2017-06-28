@@ -1,0 +1,34 @@
+@(user: User)
+<div ng-init="userid=@user.id"></div>
+<div ng-controller="Users">
+
+	SEARCH : <input type="text" ng-model="searchBox"/>
+	<table class="table">
+	<thead>
+	<tr>					
+		<th>
+			First Name
+		</th>
+		<th>
+			Last Name
+		</th>
+		<th>
+			Email
+		</th>
+	</tr>
+</thead>
+	<tbody>
+		<tr ng-repeat="user in users | filter: { email: '!@user.email' }| filter:searchBox:user.email" class="clickable-row" >
+			<td>{{user.firstname}}</td>
+			<td> {{user.lastname}} </td>
+			<td >{{user.email}}</td>
+		</tr>
+	</tbody>
+
+
+</table>
+@user
+</div>
+
+
+

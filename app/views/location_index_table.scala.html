@@ -1,0 +1,21 @@
+@(locations: List[Location])
+
+
+
+<table class="table table-striped table-condensed">
+<thead>
+<tr>
+<th>Popular Locations</th> 
+</tr>
+</thead>
+<tbody>
+  @for(i <- 0 until locations.size) {
+    <tr>
+      <td> @locations(i).getAddress()</td> 
+    </tr>
+    }
+</tbody>
+</table>
+
+
+

@@ -1,0 +1,26 @@
+@(active: String)
+
+
+
+<ul class="nav nav-tabs">
+<li><a href="/">Home</a></li>
+<li @if(active == "dashboard"){ class="active"} ><a href="/dashboard"> Dashboard</a></li>
+<li @if(active == "activities"){ class="active"} ><a href="/activities"> Activities</a></li>
+<li @if(active == "friends"){ class="active"} ><a href="/friends"> Friends</a></li>
+<li @if(active == "upload"){ class="active"} ><a href="/activity/create"> Upload</a></li>
+
+<li class="dropdown pull-right">
+	 <a href="#" data-toggle="dropdown" class="dropdown-toggle">Me<strong class="caret"></strong></a>
+	<ul class="dropdown-menu">
+		<li>
+			<a href="/myaccount">  My Account</a>
+		</li>	
+		<li>
+			<a href="/logout"> Logout</a>
+		</li>		
+	</ul>
+</li>
+</ul>
+
+
+

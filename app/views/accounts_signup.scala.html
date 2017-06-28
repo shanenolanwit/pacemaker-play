@@ -1,0 +1,42 @@
+@()
+
+@main("Welcome to Pacemaker") {
+	
+	
+	<div class="row">
+		<div class="col-md-12">
+		@welcome_menu()
+			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<form role="form" action="/register" method="POST">
+				<div class="form-group">					 
+					<label for="firstname">First Name</label>
+					<input placeholder="First Name"  class="form-control" type="text" name="firstname">
+				</div>
+				<div class="form-group">
+					 <label for="lastname">Last Name</label>
+					 <input placeholder="Last Name"  class="form-control" type="text" name="lastname">
+				</div>
+				<div class="form-group">					 
+					<label for="email">Email Address</label>
+					<input placeholder="Email Address"  class="form-control" type="text" name="email">
+				</div>
+				<div class="form-group">					 
+					<label for="password">Password</label>
+					<input placeholder="password"  class="form-control" type="password" name="password">
+				</div>
+				<button type="submit" class="btn btn-default">
+					Sign Up
+				</button>
+			</form>
+		</div>
+		<div class="col-md-6">
+			<img src="@routes.Assets.at("images/pacemaker.jpg")" class="ui medium image">
+		</div>
+	</div>
+  
+
+}

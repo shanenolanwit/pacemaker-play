@@ -1,0 +1,60 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# UI
+
+GET     /                                          controllers.Accounts.index()
+GET     /signup                                    controllers.Accounts.signup()
+GET     /login                                     controllers.Accounts.login()
+GET     /logout                                    controllers.Accounts.logout()
+POST    /register                                  controllers.Accounts.register()
+POST     /update                                  controllers.Accounts.update()
+POST     /delete                                  controllers.Accounts.delete()
+GET     /myaccount                                  controllers.Accounts.myAccount()
+POST    /authenticate                              controllers.Accounts.authenticate()
+
+GET     /dashboard                                 controllers.Dashboard.index()
+GET     /friends                                   controllers.Accounts.friends()
+
+
+
+GET		/activities                                	controllers.Activities.index()
+GET     /activity/create                           	controllers.Activities.create()
+GET     /activity/edit/:id                          controllers.Activities.edit(id: Long)
+POST    /activity/save                             	controllers.Activities.save()
+POST    /activity/update/:id                        controllers.Activities.update(id: Long)
+GET		/activity/:id                              	controllers.Activities.show(id: Long)
+
+
+# API
+
+GET     /api/users                                 controllers.PacemakerAPI.users()
+DELETE  /api/users                                 controllers.PacemakerAPI.deleteAllUsers()
+POST    /api/users                                 controllers.PacemakerAPI.createUser()
+
+GET    /api/users/:id                              controllers.PacemakerAPI.user(id: Long)
+GET    /api/friends/:id                              controllers.PacemakerAPI.friends(id: Long)
+DELETE /api/users/:id                              controllers.PacemakerAPI.deleteUser(id: Long)
+PUT    /api/users/:id                              controllers.PacemakerAPI.updateUser(id: Long)
+
+POST    /api/users/:id/addfriend/:friend_id					   	   controllers.PacemakerAPI.friend(id: Long, friend_id: Long)	
+POST    /api/users/:id/unfriend/:friend_id				   	   controllers.PacemakerAPI.unfriend(id: Long, friend_id: Long)	
+GET    /api/users/:id/leaderboard				   	   controllers.PacemakerAPI.leaderboard(id: Long)	
+GET    /api/gconvert				   	   controllers.PacemakerAPI.gconvert()	
+
+GET     /api/users/:userId/activities              controllers.PacemakerAPI.activities(userId: Long)
+POST    /api/users/:userId/activities              controllers.PacemakerAPI.createActivity(userId: Long)
+
+GET     /api/users/:userId/activities/:activityId  controllers.PacemakerAPI.activity(userId: Long, activityId:Long)
+DELETE  /api/users/:userId/activities/:activityId  controllers.PacemakerAPI.deleteActivity(userId: Long, activityId:Long)
+PUT     /api/users/:userId/activities/:activityId  controllers.PacemakerAPI.updateActivity(userId: Long, activityId:Long)
+
+GET    /api/activities/:activityId/route           	controllers.PacemakerAPI.route(activityId: Long)
+POST   /api/activities/:activityId/location        	controllers.PacemakerAPI.createLocation(activityId: Long)
+
+GET    /api/activities/:activityId/route/:locationId  	controllers.PacemakerAPI.location(activityId: Long, locationId: Long)
+DELETE /api/activities/:activityId/route/:locationId  	controllers.PacemakerAPI.deleteLocation(activityId: Long, locationId: Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                   controllers.Assets.at(path="/public", file)

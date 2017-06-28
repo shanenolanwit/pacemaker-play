@@ -1,0 +1,59 @@
+@(user: User)
+
+
+<div ng-init="userid=@user.id"></div>
+<div ng-controller="Activity">
+	<div class="form-group">
+		<div id="activity-filter-group" class="input-group">
+		<!-- Note: type="datetime-local" is not supported in Firefox, or Internet Explorer 12 and earlier versions.-->
+		<div class="row">
+			<div class="col-md-6 activity-header">Start Date</div>
+			<div class="col-md-6 activity-header">End Date</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6" style="padding-right: 0px"><input class="form-control" type="datetime-local" name="startDate" ng-model="startDate" value="{{startDate}}"></div>
+			<div class="col-md-6" style="padding-left: 0px"><input class="form-control" type="datetime-local" name="endDate" ng-model="endDate" value="{{endDate}}"></div>
+		</div>
+			
+			
+			
+			
+			<input type="text" class="form-control" placeholder="Search" ng-model="searchTerm">
+		</div>      
+	</div>
+	<table class="table">
+	<thead>
+	<tr>					
+		<th>
+			Activity Type
+		</th>
+		<th>
+			Location
+		</th>
+		<th>
+			Distance
+		</th>
+		<th>
+			Time
+		</th>
+	</tr>
+</thead>
+	<tbody>
+		<tr dir-paginate="activity in activities | itemsPerPage: 10 | filter:searchTerm:activity.name | dateRangeFilter:startDate:endDate" class="clickable-row" ng-click="inspectActivity(activity.id)">
+			<td>{{activity.activityType}}</td>
+			<td> {{activity.location}} </td>
+			<td>{{activity.distance}}</td>
+			<td>{{activity.lastUpdate.year}}-{{activity.lastUpdate.monthValue}}-{{activity.lastUpdate.dayOfMonth}} 
+			      {{activity.lastUpdate.hour}}:{{activity.lastUpdate.minute}}:{{activity.lastUpdate.second }}</td>
+		</tr>
+	</tbody>
+
+
+</table>
+<dir-pagination-controls></dir-pagination-controls>
+</div>
+
+
+
+
+

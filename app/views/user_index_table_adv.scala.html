@@ -1,0 +1,43 @@
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Search" ng-model="searchTerm">
+		</div>      
+	</div>
+	<table class="table">
+	<thead>
+	<tr>					
+		<th>
+			First Name
+		</th>
+		<th>
+			Last Name
+		</th>
+		<th>
+			Email
+		</th>
+		<th>
+			
+		</th>
+	</tr>
+</thead>
+	<tbody>
+		<tr ng-repeat="u in users | filter:searchTerm:user.email" 
+			ng-mouseenter="showUser(u.id)" class="clickable-row" 
+			ng-class="{'blue': u.is_friend, 'gray': !u.is_friend}">
+			<td>{{u.firstname}}</td>
+			<td> {{u.lastname}} </td>
+			<td >{{u.email}}</td>
+			<td ng-if="u.is_friend">FRIENDS</td>		
+			<td ng-if="!u.is_friend">NOT FRIENDS</td>		
+			
+		
+		</tr>
+	</tbody>
+
+
+</table>
+
+
+
+
+

@@ -1,0 +1,55 @@
+@(activities: List[Activity])
+
+@main("Welcome to Pacemaker") {
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="row">
+	<div class="col-md-12">
+		@main_menu("dashboard")
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+	 <img src="@routes.Assets.at("images/pacemaker.jpg")" class="ui medium image">
+	</div>
+	<div class="col-md-6">
+		<table class="table">
+			<thead>
+				<tr>					
+					<th>
+						Activity Type
+					</th>
+					<th>
+						Location
+					</th>
+					<th>
+						Distance
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		   
+		     <tr dir-paginate="activity in activities | itemsPerPage: 10 | filter:searchTerm:activity.name" class="clickable-row" ng-click="inspectActivity(activity.id)">
+		  		
+		        
+		     <td>{{activity.activityType}}</td>
+				<td> {{activity.location}} </td>
+				<td>{{activity.distance}}</td>
+		        </tr>
+		        
+		  </tbody>
+		</table>
+		<dir-pagination-controls></dir-pagination-controls>
+	</div>
+</div>
+  
+  
+}

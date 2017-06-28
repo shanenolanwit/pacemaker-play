@@ -1,0 +1,38 @@
+
+<div class="row">
+	<div class="col-md-12"><h3 class="dashboard-header">{{user.firstname}} {{user.lastname}}</h3></div>
+</div>
+<div class="row">
+	<div class="col-md-12" ng-if="user.distanceTravelled >= 0 && user.distanceTravelled < user.phaseInterval">
+		{{ user.distanceTravelled }} down . . .
+		<img src="@routes.Assets.at("images/Phase1.PNG")">
+		{{ user.phaseInterval - user.distanceTravelled }} to go . . .
+	</div>
+	<div ng-if="user.distanceTravelled >= user.phaseInterval && user.distanceTravelled < user.phaseInterval*2">
+		{{ user.distanceTravelled }} down . . .
+		<img src="@routes.Assets.at("images/Phase2.PNG")">
+		{{ user.phaseInterval*2 - user.distanceTravelled }} to go . . .
+	</div>
+	<div ng-if="user.distanceTravelled >= user.phaseInterval*2 && user.distanceTravelled < user.phaseInterval*3">
+		{{ user.distanceTravelled }} down . . .
+		<img src="@routes.Assets.at("images/Phase3.PNG")">
+		{{ user.phaseInterval*3 - user.distanceTravelled }} to go . . .
+	</div>
+	<div ng-if="user.distanceTravelled >= user.phaseInterval*3 && user.distanceTravelled < user.phaseInterval*4">
+		{{ user.distanceTravelled }} down . . .
+		<img src="@routes.Assets.at("images/Phase4.PNG")">
+		{{ user.phaseInterval*4 - user.distanceTravelled }} to go . . .
+	</div>
+	<div ng-if="user.distanceTravelled >= user.phaseInterval*5">
+		{{ user.distanceTravelled }} travelled <br/>
+		<img src="@routes.Assets.at("images/Phase5.PNG")">
+	</div>
+
+</div>
+
+<div class="row">
+<div class="col-md-12">{{user.email}}</div>
+</div>
+
+			
+		
